@@ -43,4 +43,4 @@ Download finalizado! Arquivo salvo em: .../songs/artist/Song Title.mp3
 
 ---
 
-Created by Hini Modified for automation and ease of use.
+Created by XXXXXXXX Modified for automation and ease of use.
