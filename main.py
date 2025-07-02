@@ -1,8 +1,3 @@
-# trakGrab.py
-# Daniel Guilbert
-# 12.11.19 - 07.08.24
-# v1.1
-
 from urllib.request import urlopen, URLError, Request
 from bs4 import BeautifulSoup
 import re
