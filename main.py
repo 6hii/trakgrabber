@@ -10,13 +10,13 @@ import os
 
 
 
-# Baixar música a partir de link curto do traktrain
+ # Download music from traktrain short link
 import sys
 
-short_url = input("Cole aqui o link do traktrain (ex: https://traktra.in/t/xxxx): ").strip()
+short_url = input("Paste the traktrain link here (e.g.: https://traktra.in/t/xxxx): ").strip()
 
 if not short_url:
-    print("Nenhum link fornecido.")
+    print("No link provided.")
     sys.exit(1)
 
 try:
@@ -26,24 +26,24 @@ try:
     real_url = response.geturl()
     html = response.read().decode('utf-8')
 except URLError:
-    print("Não foi possível acessar o link fornecido.")
+    print("Could not access the provided link.")
     sys.exit(1)
 
-print("Conectado! URL real:", real_url)
+print("Connected! Real URL:", real_url)
 
-# Extrai o nome do artista da URL real
+ # Extract artist name from real URL
 import urllib.parse
 parsed = urllib.parse.urlparse(real_url)
 try:
     artist = parsed.path.strip('/').split('/')[0]
 except Exception:
-    print("Não foi possível extrair o artista da URL.")
+    print("Could not extract artist from URL.")
     sys.exit(1)
 
 urlmatch = re.compile('(.)*var AWS_BASE_URL(.)*')
 m = urlmatch.search(html)
 if not m:
-    print("Não foi possível encontrar o AWS_BASE_URL na página.")
+    print("Could not find AWS_BASE_URL on the page.")
     sys.exit(1)
 baseUrl = m.group().split("'")[1]
 
@@ -51,20 +51,20 @@ pwd = os.getcwd() + "\\songs\\" + artist + "\\"
 if not os.path.exists(pwd):
     os.makedirs(pwd)
 
-# Extrai o src e o nome da música do HTML
+ # Extract src and song name from HTML
 try:
     src_match = re.search(r"data-player-info='([^']+)'", html)
     if not src_match:
-        raise Exception('data-player-info não encontrado')
+        raise Exception('data-player-info not found')
     src = src_match.group(1)
     import json
     info = json.loads(src)
     songname = info.get('name', 'track')
     srcstr = info.get('src')
     if not srcstr:
-        raise Exception('src não encontrado')
+        raise Exception('src not found')
 except Exception:
-    print("Não foi possível extrair informações da música.")
+    print("Could not extract song information.")
     sys.exit(1)
 
 songUrl = baseUrl + srcstr
@@ -76,4 +76,4 @@ outfile = open(pwd+songname+".mp3", 'wb')
 outfile.write(urlopen(req).read())
 outfile.close()
 
-print(f"\nDownload finalizado! Arquivo salvo em: {pwd+songname}.mp3")
+print(f"\nDownload finished! File saved at: {pwd+songname}.mp3")
